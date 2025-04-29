@@ -1,0 +1,22 @@
+<!-- values/strings.xml -->
+<resources>
+    <string name="app_name">Restaurant Randomizer</string>
+    <string name="list">List</string>
+    <string name="random">Random</string>
+    <string name="insert">Insert</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    <!-- Add all other strings here -->
+</resources>
+res裏開folder
+values-zh-rHK準確控制地區語言
+<!-- values-zh/strings.xml -->
+<resources>
+    <string name="app_name">餐廳隨機選擇器</string>
+    <string name="list">列表</string>
+    <string name="random">隨機</string>
+    <string name="insert">新增</string>
+    <string name="create">創建</string>
+    <string name="update">更新</string>
+    <!-- Add all other strings here -->
+</resources>
