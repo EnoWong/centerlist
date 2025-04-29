@@ -1,0 +1,73 @@
+<!-- activity_update.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Restaurant"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+        
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Restaurant Name"
+        android:layout_marginTop="16dp"/>
+        
+    <EditText
+        android:id="@+id/etDishes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Popular Dishes"
+        android:layout_marginTop="8dp"/>
+        
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
+
+// UpdateActivity.java
+public class UpdateActivity extends AppCompatActivity {
+    private EditText etName, etDishes;
+    private RestaurantDbHelper dbHelper;
+    private int restaurantId;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_update);
+        
+        dbHelper = new RestaurantDbHelper(this);
+        etName = findViewById(R.id.etName);
+        etDishes = findViewById(R.id.etDishes);
+        
+        // Get restaurant data from intent
+        restaurantId = getIntent().getIntExtra("restaurant_id", -1);
+        String name = getIntent().getStringExtra("restaurant_name");
+        String dishes = getIntent().getStringExtra("restaurant_dishes");
+        
+        etName.setText(name);
+        etDishes.setText(dishes);
+        
+        findViewById(R.id.btnUpdate).setOnClickListener(v -> {
+            String updatedName = etName.getText().toString().trim();
+            String updatedDishes = etDishes.getText().toString().trim();
+            
+            if (!updatedName.isEmpty() && restaurantId != -1) {
+                dbHelper.updateRestaurant(restaurantId, updatedName, updatedDishes);
+                startActivity(new Intent(this, StartActivity.class));
+            } else {
+                Toast.makeText(this, "Please enter restaurant name", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
