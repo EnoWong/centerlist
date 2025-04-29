@@ -1,0 +1,57 @@
+<!-- activity_list.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btnInsert"/>
+        
+    <Button
+        android:id="@+id/btnInsert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"/>
+</RelativeLayout>
+
+// ListActivity.java
+public class ListActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private RestaurantAdapter adapter;
+    private RestaurantDbHelper dbHelper;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_list);
+        
+        dbHelper = new RestaurantDbHelper(this);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        
+        // Load data from database
+        loadRestaurants();
+        
+        // Insert button click
+        findViewById(R.id.btnInsert).setOnClickListener(v -> {
+            startActivity(new Intent(this, InsertActivity.class));
+        });
+    }
+    
+    private void loadRestaurants() {
+        List<Restaurant> restaurants = dbHelper.getAllRestaurants();
+        adapter = new RestaurantAdapter(restaurants, this);
+        recyclerView.setAdapter(adapter);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadRestaurants(); // Refresh list when returning from other activities
+    }
+}
