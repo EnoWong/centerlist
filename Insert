@@ -1,0 +1,64 @@
+<!-- activity_insert.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Restaurant"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"/>
+        
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Restaurant Name"
+        android:layout_marginTop="16dp"/>
+        
+    <EditText
+        android:id="@+id/etDishes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Popular Dishes"
+        android:layout_marginTop="8dp"/>
+        
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
+
+// InsertActivity.java
+public class InsertActivity extends AppCompatActivity {
+    private EditText etName, etDishes;
+    private RestaurantDbHelper dbHelper;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_insert);
+        
+        dbHelper = new RestaurantDbHelper(this);
+        etName = findViewById(R.id.etName);
+        etDishes = findViewById(R.id.etDishes);
+        
+        findViewById(R.id.btnCreate).setOnClickListener(v -> {
+            String name = etName.getText().toString().trim();
+            String dishes = etDishes.getText().toString().trim();
+            
+            if (!name.isEmpty()) {
+                dbHelper.addRestaurant(name, dishes);
+                startActivity(new Intent(this, StartActivity.class));
+            } else {
+                Toast.makeText(this, "Please enter restaurant name", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
